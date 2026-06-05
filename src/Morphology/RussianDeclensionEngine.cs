@@ -71,7 +71,7 @@ public static class RussianDeclensionEngine
             {
                 RussianCase.Genitive => stem + "я",
                 RussianCase.Dative => stem + "ю",
-                RussianCase.Accusative => animate ? stem + "я" : stem + "я",
+                RussianCase.Accusative => animate ? stem + "я" : w,
                 RussianCase.Instrumental => stem + "ем",
                 RussianCase.Prepositional => stem + "е",
                 _ => w,
@@ -285,32 +285,14 @@ public static class RussianDeclensionEngine
     {
         var w = info.Original;
         string stem = w[..^1];
-        char? prev = stem.Length > 0 ? stem[^1] : null;
-
-        // Основа на шипящую  — добавляется -и, -и, -ь, -ью, -и
-        // Если на ж/ш/ч/щ
-        string genitiveEnding = "и";
-        string dativeEnding = "и";
-        string accusativeEnding = "ь";
-        string instrumentalEnding;
-        string prepositionalEnding = "и";
-
-        if (prev is 'ж' or 'ш' or 'ч' or 'щ')
-        {
-            instrumentalEnding = "ью";
-        }
-        else
-        {
-            instrumentalEnding = "ью";
-        }
 
         return targetCase switch
         {
-            RussianCase.Genitive => stem + genitiveEnding,
-            RussianCase.Dative => stem + dativeEnding,
-            RussianCase.Accusative => stem + accusativeEnding, // неодуш. = им.п.
-            RussianCase.Instrumental => stem + instrumentalEnding,
-            RussianCase.Prepositional => stem + prepositionalEnding,
+            RussianCase.Genitive => stem + "и",
+            RussianCase.Dative => stem + "и",
+            RussianCase.Accusative => w,
+            RussianCase.Instrumental => stem + "ью",
+            RussianCase.Prepositional => stem + "и",
             _ => w,
         };
     }
@@ -461,11 +443,11 @@ public static class RussianDeclensionEngine
 
         return targetCase switch
         {
-            RussianCase.Genitive => stem + (isSoft ? "ей" : "ой"),
-            RussianCase.Dative => stem + (isSoft ? "ей" : "ой"),
+            RussianCase.Genitive => stem + (isSoft || isHissing ? "ей" : "ой"),
+            RussianCase.Dative => stem + (isSoft || isHissing ? "ей" : "ой"),
             RussianCase.Accusative => stem + (isSoft ? "юю" : "ую"),
-            RussianCase.Instrumental => stem + (isSoft ? "ей" : "ой"),
-            RussianCase.Prepositional => stem + (isSoft ? "ей" : "ой"),
+            RussianCase.Instrumental => stem + (isSoft || isHissing ? "ей" : "ой"),
+            RussianCase.Prepositional => stem + (isSoft || isHissing ? "ей" : "ой"),
             _ => adj,
         };
     }
@@ -536,18 +518,6 @@ public static class RussianDeclensionEngine
             return adj[..^2];
         if (adj.EndsWith("ые"))
             return adj[..^2];
-        if (adj.EndsWith("ую"))
-            return adj[..^2];
-        if (adj.EndsWith("ых"))
-            return adj[..^2];
-        if (adj.EndsWith("ым"))
-            return adj[..^2];
-        if (adj.EndsWith("ыми"))
-            return adj[..^3];
-        if (adj.EndsWith("ого"))
-            return adj[..^3];
-        if (adj.EndsWith("ому"))
-            return adj[..^3];
         // fallback
         return adj;
     }
@@ -562,22 +532,6 @@ public static class RussianDeclensionEngine
         if (adj.EndsWith("ее"))
             return adj[..^2];
         if (adj.EndsWith("ие"))
-            return adj[..^2];
-        if (adj.EndsWith("юю"))
-            return adj[..^2];
-        if (adj.EndsWith("их"))
-            return adj[..^2];
-        if (adj.EndsWith("им"))
-            return adj[..^2];
-        if (adj.EndsWith("ими"))
-            return adj[..^3];
-        if (adj.EndsWith("его"))
-            return adj[..^3];
-        if (adj.EndsWith("ему"))
-            return adj[..^3];
-        if (adj.EndsWith("ей"))
-            return adj[..^2];
-        if (adj.EndsWith("ем"))
             return adj[..^2];
         // fallback
         return adj;
@@ -692,30 +646,32 @@ public static class RussianDeclensionEngine
         return ReconstructPhrase(phrase, results.ToArray());
     }
 
+    private static readonly System.Text.RegularExpressions.Regex PhraseSplitRegex = new(
+        @"([\s,\.!?\:;\(\)\[\]""«»\-]+)",
+        System.Text.RegularExpressions.RegexOptions.Compiled
+    );
+
+    private static readonly System.Text.RegularExpressions.Regex DelimiterRegex = new(
+        @"^[\s,\.!?\:;\(\)\[\]""«»\-]+$",
+        System.Text.RegularExpressions.RegexOptions.Compiled
+    );
+
     /// <summary>Восстанавливает фразу с оригинальным форматированием.</summary>
     private static string ReconstructPhrase(string original, string[] declinedWords)
     {
-        // Разделяем оригинал на части, сохраняя разделители
-        var parts = System
-            .Text.RegularExpressions.Regex.Split(original, @"([\s,\.!?\:;\(\)\[\]""«»\-]+)")
-            .Where(p => p.Length > 0)
-            .ToArray();
+        var parts = PhraseSplitRegex.Split(original).Where(p => p.Length > 0).ToArray();
 
         int wordIndex = 0;
         var result = new System.Text.StringBuilder();
 
         foreach (var part in parts)
         {
-            // Если это разделитель — просто добавляем
-            if (
-                System.Text.RegularExpressions.Regex.IsMatch(part, @"^[\s,\.!?\:;\(\)\[\]""«»\-]+$")
-            )
+            if (DelimiterRegex.IsMatch(part))
             {
                 result.Append(part);
             }
             else if (wordIndex < declinedWords.Length)
             {
-                // Восстанавливаем заглавную букву (первая буква фразы)
                 string declined = declinedWords[wordIndex];
                 if (char.IsUpper(part[0]))
                 {

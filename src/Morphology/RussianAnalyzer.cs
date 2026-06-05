@@ -98,7 +98,6 @@ public partial class RussianAnalyzer
         "кошка",
         "собака",
         "пёс",
-        "пес",
         "попугай",
         "рыба",
         "птица",
@@ -148,6 +147,7 @@ public partial class RussianAnalyzer
         ["знамя"] = GrammaticalGender.Neuter,
         ["полымя"] = GrammaticalGender.Neuter,
         // Мужской род на -ь
+        ["гость"] = GrammaticalGender.Masculine,
         ["дождь"] = GrammaticalGender.Masculine,
         ["камень"] = GrammaticalGender.Masculine,
         ["корень"] = GrammaticalGender.Masculine,
@@ -209,34 +209,26 @@ public partial class RussianAnalyzer
     private static readonly Dictionary<string, string> FleetingVowels = new()
     {
         ["пёс"] = "пс",
-        ["пес"] = "пс",
         ["день"] = "дн",
         ["пень"] = "пн",
         ["огонь"] = "огн",
         ["камень"] = "камн",
         ["корень"] = "корн",
         ["котёл"] = "котл",
-        ["котёл"] = "котл",
         ["рот"] = "рт",
         ["лоб"] = "лб",
-        ["лёд"] = "льд",
         ["лёд"] = "льд",
         ["сон"] = "сн",
         ["лев"] = "льв",
         ["потолок"] = "потолк",
         ["угол"] = "угл",
         ["ветер"] = "ветр",
-        ["ветр"] = "ветр",
-        ["огонь"] = "огн",
         ["парень"] = "парн",
-        ["хозяин"] = "хозя",
         ["боец"] = "бойц",
         ["молодец"] = "молодц",
         ["купец"] = "купц",
         ["отец"] = "отц",
-        ["зонтик"] = "зонтик", // не беглая, но -ик- может выпадать: зонтик→зонтика (сохраняется)
         ["певец"] = "певц",
-        ["жнец"] = "жнец",
     };
 
     /// <summary>Разбить фразу на слова (токены).</summary>
@@ -290,12 +282,6 @@ public partial class RussianAnalyzer
         char last = w[^1];
         char? prev = w.Length >= 2 ? w[^2] : null;
 
-        // Наречия распространённые
-        if (w.EndsWith("о") && w.Length > 3 && !IsLikelyNoun(w))
-        {
-            // неоднозначно — может быть существительным ср.р. или наречием
-        }
-
         // Считаем существительным, если заканчивается на типичные окончания
         if (
             Vowels.Contains(last)
@@ -328,11 +314,6 @@ public partial class RussianAnalyzer
                 info.PartOfSpeech = PartOfSpeech.Noun;
             }
         }
-    }
-
-    private static bool IsLikelyNoun(string w)
-    {
-        return GenderExceptions.ContainsKey(w);
     }
 
     private static void DetermineGender(WordInfo info)
@@ -381,8 +362,8 @@ public partial class RussianAnalyzer
             }
             else if (w.EndsWith("ль"))
             {
-                // -ль: женский род (соль, сталь, печаль), кроме профессий на -тель, -арь
-                if (w.EndsWith("тель") || w.EndsWith("арь"))
+                // -ль: женский род (соль, сталь, печаль), кроме профессий на -тель
+                if (w.EndsWith("тель"))
                     info.Gender = GrammaticalGender.Masculine;
                 else
                     info.Gender = GrammaticalGender.Feminine;
