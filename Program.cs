@@ -16,15 +16,17 @@ while (true)
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.Write("Введите фразу (или 'выход' для выхода): ");
     Console.ResetColor();
-    
+
     string? input = Console.ReadLine();
-    
+
     if (string.IsNullOrWhiteSpace(input))
         continue;
-    
-    if (input.Equals("выход", StringComparison.OrdinalIgnoreCase) ||
-        input.Equals("exit", StringComparison.OrdinalIgnoreCase) ||
-        input.Equals("q", StringComparison.OrdinalIgnoreCase))
+
+    if (
+        input.Equals("выход", StringComparison.OrdinalIgnoreCase)
+        || input.Equals("exit", StringComparison.OrdinalIgnoreCase)
+        || input.Equals("q", StringComparison.OrdinalIgnoreCase)
+    )
     {
         break;
     }
@@ -38,21 +40,24 @@ while (true)
     foreach (RussianCase rCase in Enum.GetValues<RussianCase>())
     {
         string declined = RussianDeclensionEngine.DeclinePhrase(input, rCase);
-        
+
         string caseName = CaseHelper.GetCaseName(rCase);
         string question = CaseHelper.GetCaseQuestion(rCase);
-        
-        if (declined.Equals(input, StringComparison.OrdinalIgnoreCase) && rCase != RussianCase.Nominative)
+
+        if (
+            declined.Equals(input, StringComparison.OrdinalIgnoreCase)
+            && rCase != RussianCase.Nominative
+        )
         {
             // Склонение не изменилось — возможно, не удалось
             Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine($"  {caseName,-14} ({question,-14}) → {declined}");
+            Console.WriteLine($"  {caseName, -14} ({question, -14}) → {declined}");
             Console.ResetColor();
         }
         else
         {
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write($"  {caseName,-14} ({question,-14}) → ");
+            Console.Write($"  {caseName, -14} ({question, -14}) → ");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(declined);
             Console.ResetColor();

@@ -45,11 +45,14 @@ public static class RussianDeclensionEngine
             GrammaticalGender.Masculine => DeclineMasculine(info, targetCase),
             GrammaticalGender.Neuter => DeclineNeuter(info, targetCase),
             // ── 2-е склонение (женский и мужской на -а/-я) ──
-            GrammaticalGender.Feminine when last == 'а' || last == 'я' => DeclineFeminineA(info, targetCase),
+            GrammaticalGender.Feminine when last == 'а' || last == 'я' => DeclineFeminineA(
+                info,
+                targetCase
+            ),
             // ── 3-е склонение (женский на -ь) ──
             GrammaticalGender.Feminine when last == 'ь' => DeclineFeminineSoft(info, targetCase),
             // ── По умолчанию ──
-            _ => info.Original
+            _ => info.Original,
         };
     }
 
@@ -71,7 +74,7 @@ public static class RussianDeclensionEngine
                 RussianCase.Accusative => animate ? stem + "я" : stem + "я",
                 RussianCase.Instrumental => stem + "ем",
                 RussianCase.Prepositional => stem + "е",
-                _ => w
+                _ => w,
             };
         }
 
@@ -92,7 +95,7 @@ public static class RussianDeclensionEngine
                 RussianCase.Accusative => animate ? stem + "я" : w,
                 RussianCase.Instrumental => stem + "ем",
                 RussianCase.Prepositional => stem + "е",
-                _ => w
+                _ => w,
             };
         }
 
@@ -107,7 +110,7 @@ public static class RussianDeclensionEngine
                 RussianCase.Accusative => animate ? stem + "а" : w,
                 RussianCase.Instrumental => stem + "ом",
                 RussianCase.Prepositional => stem + "е",
-                _ => w
+                _ => w,
             };
         }
 
@@ -119,7 +122,7 @@ public static class RussianDeclensionEngine
             RussianCase.Accusative => animate ? stem + "а" : w,
             RussianCase.Instrumental => stem + "ом",
             RussianCase.Prepositional => stem + "е",
-            _ => w
+            _ => w,
         };
     }
 
@@ -143,7 +146,7 @@ public static class RussianDeclensionEngine
                     RussianCase.Accusative => w,
                     RussianCase.Instrumental => stem + "ом",
                     RussianCase.Prepositional => stem + "е",
-                    _ => w
+                    _ => w,
                 };
             }
             return targetCase switch
@@ -153,7 +156,7 @@ public static class RussianDeclensionEngine
                 RussianCase.Accusative => w,
                 RussianCase.Instrumental => stem + "ом",
                 RussianCase.Prepositional => stem + "е",
-                _ => w
+                _ => w,
             };
         }
 
@@ -163,7 +166,7 @@ public static class RussianDeclensionEngine
             // Если основа на шипящую: -ем/-ём
             bool hissingStem = stem.Length > 0 && IsHissing(stem[^1]);
             string instEnding = last == 'ё' || hissingStem ? "ём" : "ем";
-            
+
             return targetCase switch
             {
                 RussianCase.Genitive => stem + "я",
@@ -171,7 +174,7 @@ public static class RussianDeclensionEngine
                 RussianCase.Accusative => w,
                 RussianCase.Instrumental => stem + instEnding,
                 RussianCase.Prepositional => stem + "е",
-                _ => w
+                _ => w,
             };
         }
 
@@ -186,7 +189,7 @@ public static class RussianDeclensionEngine
                 RussianCase.Accusative => w,
                 RussianCase.Instrumental => stem + "ием",
                 RussianCase.Prepositional => stem + "ии",
-                _ => w
+                _ => w,
             };
         }
 
@@ -215,7 +218,7 @@ public static class RussianDeclensionEngine
                     RussianCase.Accusative => animate ? stem + "у" : stem + "у",
                     RussianCase.Instrumental => stem + "ой",
                     RussianCase.Prepositional => stem + "е",
-                    _ => w
+                    _ => w,
                 };
             }
             // После к, г, х особенность: -а → -и (род), -е (дат), -у (вин), -ой (твор), -е (предл)
@@ -230,10 +233,10 @@ public static class RussianDeclensionEngine
                     RussianCase.Accusative => stem + "у",
                     RussianCase.Instrumental => stem + "ой",
                     RussianCase.Prepositional => stem + "е",
-                    _ => w
+                    _ => w,
                 };
             }
-            
+
             return targetCase switch
             {
                 RussianCase.Genitive => stem + "ы",
@@ -241,7 +244,7 @@ public static class RussianDeclensionEngine
                 RussianCase.Accusative => stem + "у",
                 RussianCase.Instrumental => stem + "ой",
                 RussianCase.Prepositional => stem + "е",
-                _ => w
+                _ => w,
             };
         }
 
@@ -255,7 +258,7 @@ public static class RussianDeclensionEngine
                 RussianCase.Accusative => stem + "ю",
                 RussianCase.Instrumental => stem + "ей",
                 RussianCase.Prepositional => stem + "е",
-                _ => w
+                _ => w,
             };
         }
 
@@ -270,7 +273,7 @@ public static class RussianDeclensionEngine
                 RussianCase.Accusative => stem + "ию",
                 RussianCase.Instrumental => stem + "ией",
                 RussianCase.Prepositional => stem + "ии",
-                _ => w
+                _ => w,
             };
         }
 
@@ -308,7 +311,7 @@ public static class RussianDeclensionEngine
             RussianCase.Accusative => stem + accusativeEnding, // неодуш. = им.п.
             RussianCase.Instrumental => stem + instrumentalEnding,
             RussianCase.Prepositional => stem + prepositionalEnding,
-            _ => w
+            _ => w,
         };
     }
 
@@ -323,7 +326,7 @@ public static class RussianDeclensionEngine
             RussianCase.Accusative => w,
             RussianCase.Instrumental => stem + "менем",
             RussianCase.Prepositional => stem + "мени",
-            _ => w
+            _ => w,
         };
     }
 
@@ -337,7 +340,7 @@ public static class RussianDeclensionEngine
             RussianCase.Accusative => "путь",
             RussianCase.Instrumental => "путём",
             RussianCase.Prepositional => "пути",
-            _ => "путь"
+            _ => "путь",
         };
     }
 
@@ -351,16 +354,20 @@ public static class RussianDeclensionEngine
             RussianCase.Accusative => "дитя",
             RussianCase.Instrumental => "дитятей",
             RussianCase.Prepositional => "дитяти",
-            _ => "дитя"
+            _ => "дитя",
         };
     }
 
     // ────────── Склонение прилагательных ──────────
 
     /// <summary>Просклонять прилагательное (согласовать с родом, числом, падежом, одушевлённостью).</summary>
-    public static string DeclineAdjective(string adjective, GrammaticalGender gender, 
-                                           GrammaticalNumber number, RussianCase targetCase,
-                                           Animacy animacy = Animacy.Inanimate)
+    public static string DeclineAdjective(
+        string adjective,
+        GrammaticalGender gender,
+        GrammaticalNumber number,
+        RussianCase targetCase,
+        Animacy animacy = Animacy.Inanimate
+    )
     {
         var info = RussianAnalyzer.Analyze(adjective);
         if (info.PartOfSpeech != PartOfSpeech.Adjective)
@@ -370,9 +377,13 @@ public static class RussianDeclensionEngine
     }
 
     /// <summary>Склонение прилагательного с учётом его морфологии.</summary>
-    private static string DeclineAdjectiveForm(string adj, GrammaticalGender gender, 
-                                                GrammaticalNumber number, RussianCase targetCase,
-                                                Animacy animacy = Animacy.Inanimate)
+    private static string DeclineAdjectiveForm(
+        string adj,
+        GrammaticalGender gender,
+        GrammaticalNumber number,
+        RussianCase targetCase,
+        Animacy animacy = Animacy.Inanimate
+    )
     {
         // Определяем тип основы
         bool isSoft = IsAdjectiveSoftStem(adj);
@@ -385,14 +396,31 @@ public static class RussianDeclensionEngine
 
         return gender switch
         {
-            GrammaticalGender.Masculine => DeclineAdjectiveMasculine(adj, targetCase, isSoft, isHissing, animacy),
-            GrammaticalGender.Feminine => DeclineAdjectiveFeminine(adj, targetCase, isSoft, isHissing),
+            GrammaticalGender.Masculine => DeclineAdjectiveMasculine(
+                adj,
+                targetCase,
+                isSoft,
+                isHissing,
+                animacy
+            ),
+            GrammaticalGender.Feminine => DeclineAdjectiveFeminine(
+                adj,
+                targetCase,
+                isSoft,
+                isHissing
+            ),
             GrammaticalGender.Neuter => DeclineAdjectiveNeuter(adj, targetCase, isSoft, isHissing),
-            _ => adj
+            _ => adj,
         };
     }
 
-    private static string DeclineAdjectiveMasculine(string adj, RussianCase targetCase, bool isSoft, bool isHissing, Animacy animacy = Animacy.Inanimate)
+    private static string DeclineAdjectiveMasculine(
+        string adj,
+        RussianCase targetCase,
+        bool isSoft,
+        bool isHissing,
+        Animacy animacy = Animacy.Inanimate
+    )
     {
         // Выделяем основу: убираем -ый, -ий, -ой
         string stem = isSoft ? ExtractSoftAdjStem(adj) : ExtractAdjStem(adj);
@@ -415,11 +443,16 @@ public static class RussianDeclensionEngine
             RussianCase.Dative => stem + (isSoft || isHissing ? "ему" : "ому"),
             RussianCase.Instrumental => stem + (isSoft || isHissing ? "им" : "ым"),
             RussianCase.Prepositional => stem + (isSoft || isHissing ? "ем" : "ом"),
-            _ => adj
+            _ => adj,
         };
     }
 
-    private static string DeclineAdjectiveFeminine(string adj, RussianCase targetCase, bool isSoft, bool isHissing)
+    private static string DeclineAdjectiveFeminine(
+        string adj,
+        RussianCase targetCase,
+        bool isSoft,
+        bool isHissing
+    )
     {
         string stem = isSoft ? ExtractSoftAdjStem(adj) : ExtractAdjStem(adj);
 
@@ -433,11 +466,16 @@ public static class RussianDeclensionEngine
             RussianCase.Accusative => stem + (isSoft ? "юю" : "ую"),
             RussianCase.Instrumental => stem + (isSoft ? "ей" : "ой"),
             RussianCase.Prepositional => stem + (isSoft ? "ей" : "ой"),
-            _ => adj
+            _ => adj,
         };
     }
 
-    private static string DeclineAdjectiveNeuter(string adj, RussianCase targetCase, bool isSoft, bool isHissing)
+    private static string DeclineAdjectiveNeuter(
+        string adj,
+        RussianCase targetCase,
+        bool isSoft,
+        bool isHissing
+    )
     {
         string stem = isSoft ? ExtractSoftAdjStem(adj) : ExtractAdjStem(adj);
 
@@ -450,11 +488,17 @@ public static class RussianDeclensionEngine
             RussianCase.Dative => stem + (isSoft ? "ему" : "ому"),
             RussianCase.Instrumental => stem + (isSoft ? "им" : "ым"),
             RussianCase.Prepositional => stem + (isSoft ? "ем" : "ом"),
-            _ => adj
+            _ => adj,
         };
     }
 
-    private static string DeclineAdjectivePlural(string adj, RussianCase targetCase, bool isSoft, bool isHissing, Animacy animacy = Animacy.Inanimate)
+    private static string DeclineAdjectivePlural(
+        string adj,
+        RussianCase targetCase,
+        bool isSoft,
+        bool isHissing,
+        Animacy animacy = Animacy.Inanimate
+    )
     {
         string stem = isSoft ? ExtractSoftAdjStem(adj) : ExtractAdjStem(adj);
 
@@ -475,24 +519,35 @@ public static class RussianDeclensionEngine
             RussianCase.Dative => stem + (isSoft ? "им" : "ым"),
             RussianCase.Instrumental => stem + (isSoft ? "ими" : "ыми"),
             RussianCase.Prepositional => stem + (isSoft ? "их" : "ых"),
-            _ => adj
+            _ => adj,
         };
     }
 
     /// <summary>Извлечь основу прилагательного (твёрдое склонение).</summary>
     private static string ExtractAdjStem(string adj)
     {
-        if (adj.EndsWith("ый")) return adj[..^2];
-        if (adj.EndsWith("ой")) return adj[..^2];
-        if (adj.EndsWith("ая")) return adj[..^2];
-        if (adj.EndsWith("ое")) return adj[..^2];
-        if (adj.EndsWith("ые")) return adj[..^2];
-        if (adj.EndsWith("ую")) return adj[..^2];
-        if (adj.EndsWith("ых")) return adj[..^2];
-        if (adj.EndsWith("ым")) return adj[..^2];
-        if (adj.EndsWith("ыми")) return adj[..^3];
-        if (adj.EndsWith("ого")) return adj[..^3];
-        if (adj.EndsWith("ому")) return adj[..^3];
+        if (adj.EndsWith("ый"))
+            return adj[..^2];
+        if (adj.EndsWith("ой"))
+            return adj[..^2];
+        if (adj.EndsWith("ая"))
+            return adj[..^2];
+        if (adj.EndsWith("ое"))
+            return adj[..^2];
+        if (adj.EndsWith("ые"))
+            return adj[..^2];
+        if (adj.EndsWith("ую"))
+            return adj[..^2];
+        if (adj.EndsWith("ых"))
+            return adj[..^2];
+        if (adj.EndsWith("ым"))
+            return adj[..^2];
+        if (adj.EndsWith("ыми"))
+            return adj[..^3];
+        if (adj.EndsWith("ого"))
+            return adj[..^3];
+        if (adj.EndsWith("ому"))
+            return adj[..^3];
         // fallback
         return adj;
     }
@@ -500,18 +555,30 @@ public static class RussianDeclensionEngine
     /// <summary>Извлечь основу прилагательного (мягкое склонение).</summary>
     private static string ExtractSoftAdjStem(string adj)
     {
-        if (adj.EndsWith("ий")) return adj[..^2];
-        if (adj.EndsWith("яя")) return adj[..^2];
-        if (adj.EndsWith("ее")) return adj[..^2];
-        if (adj.EndsWith("ие")) return adj[..^2];
-        if (adj.EndsWith("юю")) return adj[..^2];
-        if (adj.EndsWith("их")) return adj[..^2];
-        if (adj.EndsWith("им")) return adj[..^2];
-        if (adj.EndsWith("ими")) return adj[..^3];
-        if (adj.EndsWith("его")) return adj[..^3];
-        if (adj.EndsWith("ему")) return adj[..^3];
-        if (adj.EndsWith("ей")) return adj[..^2];
-        if (adj.EndsWith("ем")) return adj[..^2];
+        if (adj.EndsWith("ий"))
+            return adj[..^2];
+        if (adj.EndsWith("яя"))
+            return adj[..^2];
+        if (adj.EndsWith("ее"))
+            return adj[..^2];
+        if (adj.EndsWith("ие"))
+            return adj[..^2];
+        if (adj.EndsWith("юю"))
+            return adj[..^2];
+        if (adj.EndsWith("их"))
+            return adj[..^2];
+        if (adj.EndsWith("им"))
+            return adj[..^2];
+        if (adj.EndsWith("ими"))
+            return adj[..^3];
+        if (adj.EndsWith("его"))
+            return adj[..^3];
+        if (adj.EndsWith("ему"))
+            return adj[..^3];
+        if (adj.EndsWith("ей"))
+            return adj[..^2];
+        if (adj.EndsWith("ем"))
+            return adj[..^2];
         // fallback
         return adj;
     }
@@ -519,24 +586,29 @@ public static class RussianDeclensionEngine
     /// <summary>Основа мягкая? (-ий, -яя, -ее, -ие).</summary>
     public static bool IsAdjectiveSoftStem(string adj)
     {
-        return adj.EndsWith("ий") || adj.EndsWith("яя") || 
-               adj.EndsWith("ее") || adj.EndsWith("ие");
+        return adj.EndsWith("ий") || adj.EndsWith("яя") || adj.EndsWith("ее") || adj.EndsWith("ие");
     }
 
     /// <summary>Основа на шипящую?</summary>
     public static bool IsAdjectiveHissingStem(string adj)
     {
         // Прилагательные на -ший, -щий, -жий и т.п.
-        if (adj.Length < 3) return false;
+        if (adj.Length < 3)
+            return false;
         // Проверяем последнюю согласную основы
         if (adj.EndsWith("ий") || adj.EndsWith("ый") || adj.EndsWith("ой"))
         {
             char c = adj[^3]; // буква перед окончанием
             return IsHissing(c);
         }
-        if (adj.EndsWith("ая") || adj.EndsWith("яя") || 
-            adj.EndsWith("ое") || adj.EndsWith("ее") ||
-            adj.EndsWith("ые") || adj.EndsWith("ие"))
+        if (
+            adj.EndsWith("ая")
+            || adj.EndsWith("яя")
+            || adj.EndsWith("ое")
+            || adj.EndsWith("ее")
+            || adj.EndsWith("ые")
+            || adj.EndsWith("ие")
+        )
         {
             char c = adj[^3];
             return IsHissing(c);
@@ -553,7 +625,8 @@ public static class RussianDeclensionEngine
             return phrase;
 
         var words = RussianAnalyzer.Tokenize(phrase);
-        if (words.Length == 0) return phrase;
+        if (words.Length == 0)
+            return phrase;
 
         // Анализируем каждое слово
         var wordInfos = words.Select(RussianAnalyzer.Analyze).ToArray();
@@ -574,14 +647,16 @@ public static class RussianDeclensionEngine
         for (int i = 0; i < wordInfos.Length; i++)
         {
             var info = wordInfos[i];
-            
+
             if (info.PartOfSpeech == PartOfSpeech.Preposition)
             {
                 // Предлоги могут требовать определённого падежа, но мы просто оставляем
                 results.Add(info.Original);
             }
-            else if (info.PartOfSpeech == PartOfSpeech.Conjunction ||
-                     info.PartOfSpeech == PartOfSpeech.Other)
+            else if (
+                info.PartOfSpeech == PartOfSpeech.Conjunction
+                || info.PartOfSpeech == PartOfSpeech.Other
+            )
             {
                 results.Add(info.Original);
             }
@@ -595,7 +670,7 @@ public static class RussianDeclensionEngine
                 GrammaticalGender gender = GrammaticalGender.Masculine;
                 GrammaticalNumber number = GrammaticalNumber.Singular;
                 Animacy animacy = Animacy.Inanimate;
-                
+
                 if (mainNounIndex >= 0)
                 {
                     var nounInfo = wordInfos[mainNounIndex];
@@ -604,7 +679,7 @@ public static class RussianDeclensionEngine
                     // Упрощённо: считаем единственное число
                     number = GrammaticalNumber.Singular;
                 }
-                
+
                 results.Add(DeclineAdjective(info.Original, gender, number, targetCase, animacy));
             }
             else
@@ -621,16 +696,20 @@ public static class RussianDeclensionEngine
     private static string ReconstructPhrase(string original, string[] declinedWords)
     {
         // Разделяем оригинал на части, сохраняя разделители
-        var parts = System.Text.RegularExpressions.Regex.Split(original, 
-            @"([\s,\.!?\:;\(\)\[\]""«»\-]+)").Where(p => p.Length > 0).ToArray();
-        
+        var parts = System
+            .Text.RegularExpressions.Regex.Split(original, @"([\s,\.!?\:;\(\)\[\]""«»\-]+)")
+            .Where(p => p.Length > 0)
+            .ToArray();
+
         int wordIndex = 0;
         var result = new System.Text.StringBuilder();
-        
+
         foreach (var part in parts)
         {
             // Если это разделитель — просто добавляем
-            if (System.Text.RegularExpressions.Regex.IsMatch(part, @"^[\s,\.!?\:;\(\)\[\]""«»\-]+$"))
+            if (
+                System.Text.RegularExpressions.Regex.IsMatch(part, @"^[\s,\.!?\:;\(\)\[\]""«»\-]+$")
+            )
             {
                 result.Append(part);
             }
@@ -656,6 +735,5 @@ public static class RussianDeclensionEngine
 
     // ────────── Вспомогательные ──────────
 
-    private static bool IsHissing(char c) =>
-        c is 'ж' or 'ш' or 'ч' or 'щ';
+    private static bool IsHissing(char c) => c is 'ж' or 'ш' or 'ч' or 'щ';
 }
