@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "servers": [
+    {
+      "id": "csharp-ls",
+      "enabled": true,
+      "include": ["**/*.cs", "**/*.csproj", "**/*.csx"],
+      "rootMarkers": [],
+      "bin": "csharp-ls",
+      "args": [],
+      "cwd": "{root}",
+      "languageIdByExtension": {
+        ".cs": "csharp",
+        ".csproj": "xml",
+        ".sln": "xml",
+        ".csx": "csharp"
+      },
+      "startupTimeoutMs": 60000,
+      "diagnosticsWaitMs": 2000
+    }
+  ]
+}
